@@ -1,0 +1,62 @@
+appBar: AppBar(
+  iconTheme: IconThemeData(color: Colors.white),
+  title: Text(
+    widget.profile == null ? "Form Add" : "Change Data",
+    style: TextStyle(color: Colors.white),
+  ),
+  )
+  child: RaisedButton(
+    child: Text(
+             widget.profile == null
+             ? "Submit".toUpperCase()
+      : "Update Data".toUpperCase(),
+             style: TextStyle(
+               color: Colors.white,
+             ),
+    ),
+    onPressed: () {
+    ....
+}
+  if (_isFieldNameValid == null ||
+  _isFieldEmailValid == null ||
+  _isFieldAgeValid == null ||
+  !_isFieldNameValid ||
+  !_isFieldEmailValid ||
+  !_isFieldAgeValid) {
+    _scaffoldState.currentState.showSnackBar(
+    SnackBar(
+    content: Text("Please fill all field"),
+    ),
+    );
+    return;
+  }
+  setState(() => _isLoading = true);
+  String name = _controllerName.text.toString();
+  String email = _controllerEmail.text.toString();
+  int age = int.parse(_controllerAge.text.toString());
+  Profile profile =
+Profile(name: name, email: email, age: age);
+  if (widget.profile == null) {
+  _apiService.createProfile(profile).then((isSuccess) {
+  setState(() => _isLoading = false);
+  if (isSuccess) {
+  Navigator.pop(_scaffoldState.currentState.context);
+} else {
+  _scaffoldState.currentState.showSnackBar(SnackBar(
+content: Text("Submit data failed"),
+  ));
+}
+});
+} else {
+  profile.id = widget.profile.id;
+  _apiService.updateProfile(profile).then((isSuccess) {
+  setState(() => _isLoading = false);
+  if (isSuccess) {
+  Navigator.pop(_scaffoldState.currentState.context);
+} else {
+  _scaffoldState.currentState.showSnackBar(SnackBar(
+content: Text("Update data failed"),
+  ));
+}
+});
+}
